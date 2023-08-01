@@ -1,6 +1,6 @@
 name: CI-PlatformIO-Esp32
-on: [workflow_dispatch, push]
-
+#on: [workflow_dispatch, push]
+on: [workflow_dispatch]
 
 jobs:
   PlatformIO-ESP32:
