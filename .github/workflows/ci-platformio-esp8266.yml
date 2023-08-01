@@ -6,7 +6,7 @@ jobs:
   PlatformIO-ESP8266:
     runs-on: ubuntu-latest
     env:
-      TARGET: nodemcuv2 # Must match the value after colon in platformio.ini (line 4: [env:nodemcuv2])
+      TARGET: esp8266 # Must match the value after colon in platformio.ini (line 4: [env:nodemcuv2])
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
