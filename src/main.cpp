@@ -2,14 +2,16 @@
 #ifdef ESP32
 #include <WiFi.h>
 #include "SPIFFS.h"
+#define FILESYS SPIFFS
 #else
 #include <ESP8266WiFi.h>
 #include <LittleFS.h>
+#define FILESYS LittleFS
 #endif
 
 #include <ota.h>
 
-#define FILESYS SPIFFS
+
 
 // This string should correspond to github tag used for Releasing (via. Github Actions)
 #define VERSION "0.0.1"
