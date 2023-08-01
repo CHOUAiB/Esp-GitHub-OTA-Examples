@@ -1,0 +1,87 @@
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+  pull_request:
+    branches: [main]
+
+name: Create Release
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+ Arduino-ESP32:
+    runs-on: ubuntu-latest
+    env:
+      TARGET: esp32wrover
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+      with:
+        submodules: 'true'
+    - name: Setup Arduino CLI
+      uses: arduino/setup-arduino-cli@v1
+
+    - name: Install ESP32 core
+      run: |
+        arduino-cli core update-index
+        curl https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json --output /home/runner/.arduino15/package_esp32_index.json
+        arduino-cli core install -v esp32:esp32 --additional-urls https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+        arduino-cli config init
+        arduino-cli config set library.enable_unsafe_install true
+        arduino-cli lib install -v ArduinoJson
+        arduino-cli lib install -v --git-url https://github.com/CHOUAiB/Esp-GitHub-OTA.git
+
+    - name: Compile Sketch
+      run: arduino-cli compile -b esp32:esp32:${{ env.TARGET }}
+      working-directory: src
+    
+    - name: Store Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+          name: firmware
+          path: .pio/build/*/firmware_*.bin
+          retention-days: 1
+          
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%h %d %Y - %H:%M:%S')"
+
+    - name: Update version.json file
+      uses: jossef/action-set-json-field@v1
+      with:
+        file: nightly/version.json
+        field: version
+        value: ${{ steps.date.outputs.date }}
+    
+    - name: Copy firmware to nightly folder
+      run: |
+        cp build/ufo-esp32.bin nightly/ufo-esp32.bin
+        git config --global user.email "user@email.com"
+        git config --global user.name "username"
+        git add . -A
+        git commit -m "nightly build"
+        git push
+      
+ release:
+    name: Release
+    # if: startsWith(github.event.ref, 'refs/tags/v')
+    needs: Arduino-ESP32
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo for CHANGELOG
+        uses: actions/checkout@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: firmware
+          path: firmware
+      # - name: Display structure of downloaded files
+      #   run: ls -R
+      - name: release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "firmware/*/firmware_*.bin"
+          bodyFile: "CHANGELOG.md"
