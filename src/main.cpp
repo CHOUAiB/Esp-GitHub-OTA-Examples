@@ -11,8 +11,6 @@
 
 #include <ota.h>
 
-
-
 // This string should correspond to github tag used for Releasing (via. Github Actions)
 #define VERSION "0.0.1"
 
