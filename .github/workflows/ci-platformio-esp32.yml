@@ -6,7 +6,7 @@ jobs:
   PlatformIO-ESP32:
     runs-on: ubuntu-latest
     env:
-      TARGET: nodemcu-32s # Must match the value after colon in platformio.ini (line 4: [env:nodemcu-32s])
+      TARGET: esp32 # Must match the value after colon in platformio.ini (line 4: [env:nodemcu-32s])
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
