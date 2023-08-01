@@ -1,4 +1,5 @@
-name: Auto Create PIO ESP32
+name: Auto-Create-PIO-ESP32
+
 #on: [workflow_dispatch, push]
 on: [workflow_dispatch]
 
@@ -55,5 +56,5 @@ jobs:
       - name: release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "firmware/*/firmware_*.bin"
+          artifacts: "firmware/*/firmware*.bin"
           bodyFile: "CHANGELOG.md"
