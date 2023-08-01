@@ -1,7 +1,14 @@
 name: Auto-Create-PIO-ESP32
 
 #on: [workflow_dispatch, push]
-on: [workflow_dispatch]
+#on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+  pull_request:
+    branches: [main]
 
 jobs:
   PlatformIO-ESP32:
