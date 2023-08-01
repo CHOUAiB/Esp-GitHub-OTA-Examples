@@ -23,7 +23,8 @@
 // Use this version of the URL together with 
 //Line 22: GitHubOTA GitHubOTA(VERSION, RELEASE_URL, "firmware.bin", "filesystem.bin", "/.fs_update_pending", false);
 // under debugging to spare yourself from getting timeout from GitHub API
-#define RELEASE_URL "https://github.com/your_username/your_repo/releases/latest"
+#define RELEASE_URL "https://github.com/CHOUAiB/Esp-GitHub-OTA-Examples/releases/latest"
+//#define RELEASE_URL "https://github.com/your_username/your_repo/releases/latest"
 
 #define DELAY_MS 1000
 
