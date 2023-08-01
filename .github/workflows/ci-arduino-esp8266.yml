@@ -1,6 +1,6 @@
 name: CI-Arduino-Esp8266
-on: [workflow_dispatch, push]
-
+#on: [workflow_dispatch, push]
+on: [workflow_dispatch]
 
 jobs:
   Arduino-ESP8266:
